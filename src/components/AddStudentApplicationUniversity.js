@@ -4,9 +4,24 @@ import { AuthContext } from "./Auth";
 import firebaseConfig from "../config.js";
 import "./style.css";
 import Logo from "../assets/logo.png";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import Container from "react-bootstrap/Container";
+// import Nav from "react-bootstrap/Nav";
+import Select from "react-select";
+import data from "./data.json";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Link from "@material-ui/core/Link";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const AddStudentApplicationUniversity = (props) => {
 	const history = useHistory();
@@ -23,47 +38,461 @@ const AddStudentApplicationUniversity = (props) => {
 	var complete = 0;
 	var inProgress = 0;
 	var univ = "";
+	const [university, setUniversity] = useState(null);
+	const [univcountry, setUnivcountry] = useState(null);
+	const [univlist, setUnivlist] = useState([]);
 
 	console.log(props.location.state.detail);
+	const [ddl1, setDdl1] = useState([]);
+	const [ddl2, setDdl2] = useState([]);
+	const [selectddl, setSelectddl] = useState("");
+	useEffect(() => {
+		setDdl1([
+			{
+				country: "UK Universities",
+				ddl2: [
+					"Aston University",
+					"Amity Global Instiute",
+					"Arts University Bournemouth",
+					"Bangor University",
+					"Bath Spa University",
+					"Birbeck University of London",
+					"Birmingham City International College Ltd an Associate College of Birmingham City University (Navitas)",
+					"Birmingham City University",
+					"Bournemouth University International College (Kaplan International)",
+					"Brunel University",
+					"Cambridge Education Group",
+					"Cambridge Ruskin International College Limited an Associate College of Anglia Ruskin University CN (Navitas)",
+					"Canterbury Christ Church University",
+					"Cardiff Metroplitan University",
+					"Cardiff University",
+					"City University London",
+					"City, University of London (INTO University)",
+					"Coventry University",
+					"Cranfield University",
+					"De Montfort University",
+					"Durham University",
+					"Glasgow Caledonian University",
+					"Glasgow Caledonian University (INTO University)",
+					"Glasgow International College (Kaplan International)",
+					"Hertfordshire International College an Associate College of the University of Hertfordshire (Navitas)",
+					"Heriot Watt University",
+					"International College at Robert Gordon University Ltd an Affiliate College of Robert Gordon University (Navitas)",
+					"International College Portsmouth Ltd an Associate College of the University of Portsmouth (Navitas)",
+					"Istituto Marangoni, London",
+					"Kaplan International",
+					"Kaplan International College London (Kaplan International)",
+					"Keele University",
+					"Kingston University",
+					"Le - Cordon Bleu, London",
+					"Leicester Global Study Centre, University of Leicester (Navitas)",
+					"Liverpool Hope University (Referral Agreement)",
+					"Liverpool International College (Kaplan International)",
+					"Liverpool John Moore’s University",
+					"London IBT Ltd trading as London Brunel International College an Affiliate College of Brunel University (Navitas)",
+					"London South Bank University",
+					"Loughborough University",
+					"Manchester Metroploitan University",
+					"Middlesex University",
+					"Newcastle University (INTO University)",
+					"Newcastle University London",
+					"Northampton IC Ltd trading as University of Northampton International College an Associate College of the University of Northampton (Navitas)",
+					"Nottingham Foundation Academy”, “The University of Nottingham” and “The University of Nottingham International College (Kaplan International)",
+					"Nottingham Trent International College (Kaplan International)",
+					"Nottingham Trent University",
+					"Oxford Interational Education Group",
+					"Plymouth Devon International College Ltd trading as The University of Plymouth International College an Associate College of the University of Plymouth (Navitas)",
+					"Plymouth University",
+					"QS Quacquarelli Symonds Limited",
+					"Queen Mary University of London",
+					"Queen’s University Belfast (INTO University)",
+					"Queens University Belfast",
+					"Regents University London",
+					"Royal Holloway University",
+					"Royal Holloway University",
+					"Sheffield Hallam University",
+					"SOAS",
+					"SwaN Global Education LLP trading as The College, Swansea University (Navitas)",
+					"Swansea University",
+					"Teeside University",
+					"Ulster University",
+					"Univeristy of Liverpool",
+					"University of Aberdeen",
+					"University of Arts London",
+					"University of Bedfordshire",
+					"University of Birmingham",
+					"University of Bradford",
+					"University of Brighton",
+					"University of Brighton’s International College (Kaplan International)",
+					"University of Bristol",
+					"University of Central Lancashire",
+					"University of Chester",
+					"University of Derby",
+					"University of Dundee",
+					"University of East Anglia (INTO University)",
+					"University of Essex International College (Kaplan International)",
+					"University of Exeter",
+					"Universtiy of East Anglia",
+					"University of Greenwich",
+					"University of Hertfordshire",
+					"University of Kent",
+					"University of Law",
+					"University of Manchester",
+					"University of Nottingham",
+					"University of Reading",
+					"University of Roehampton",
+					"University of Sheffield",
+					"University of South Wales",
+					"University of Stirling",
+					"University of Stirling (INTO University)",
+					"University of Strathclyde",
+					"University of Surrey",
+					"University of Sussex",
+					"University of the West of England, Bristol's International College (Kaplan International)",
+					"University of West Scotland",
+					"University of York",
+					"University of York International Pathway College (Kaplan International)",
+				],
+			},
+
+			{
+				country: "Australia Universities",
+				ddl2: [
+					"ANU College (Study Group)",
+					"ATMC",
+					"Australia Catholic University",
+					"Bond University",
+					"Charles Sturt University (Study Group)",
+					"Charles Darwin University",
+					"Charles Sturt University",
+					"CQ University",
+					"Curtin College in association with Curtin University of Technology (Navitas)",
+					"Deakin College in association with Deakin University",
+					"Deakin University",
+					"Edith Cowan College Pty Ltd in association with Edith Cowan University (Navitas)",
+					"Edith Cowan University",
+					"Educational Enterprises Australia Pty Ltd operating as Eynesbury College, Eynesbury College Academy of English (ECAE), Eynesbury Institute of Business and Technology, Eynesbury, and Eynesbury Internationa (Navitas)",
+					"Flinders International Study Centre (Study Group)",
+					"Flinders University",
+					"Griffith College in association with Griffith University (Navitas)",
+					"Griffith University",
+					"James Cook University - Brisbane & Sarrino Russo",
+					"James Cook University - Townsville",
+					"Kaplan Business School",
+					"Kaplan International",
+					"La Trobe University",
+					"La Trobe University Sydney Campus in association with La Trobe University (Navitas)",
+					"Le Cordon Bleu",
+					"Lyons College",
+					"Macquarie University",
+					"Monash University",
+					"Murdoch University",
+					"Navitas Bundoora Pty Ltd trading as La Trobe College Australia in association with La Trobe University (Navitas)",
+					"Navitas Professional Institute Pty Ltd trading as Australian College of Applied Psychology (Navitas)",
+					"NIC in association with the University of Newcastle (Navitas)",
+					"RMIT",
+					"South Australian Institute of Business and Technology Pty Ltd and Centre for English Language in the University of South Australia in association with University of South Australia (Navitas)",
+					"Southern Cross University",
+					"Southern Cross University (Educo International Group)",
+					"Southern Cross University- The Hotel School",
+					"Swinburne University of Technology",
+					"Sydney Institute of Business and Technology Pty Ltd (Navitas )",
+					"Taylors College (Study Group)",
+					"The University of Southern Queensland",
+					"Blue Mountains International Hotel Management School- Torrens University.",
+					"University of Adelaide",
+					"University of Melboune",
+					"University of Newcastle",
+					"University of New South Wales (UNSW)",
+					"University of Queensland",
+					"University of South Australia",
+					"University of Sydney",
+					"University of Sydney - Foundation Program (Study Group)",
+					"University of Tasmania",
+					"University of Western Australia",
+					"University of Wollongong",
+					"Western Sydney University",
+					"Western Sydney University International College Pty Ltd in association with Western Sydney University (Navitas)",
+				],
+			},
+			{
+				country: "New Zealand Universities",
+				ddl2: [
+					"AIS",
+					"ARA Institute of Canterbury",
+					"Aspire 2",
+					"ATMC",
+					"AUT University",
+					"Christchurch Institute of Business and Technology trading as UC International College in association with the University of Canterbury (Navitas)",
+					"EIT",
+					"ICL Education Group",
+					"Le Cordon Bleu",
+					"Massey University",
+					"Newton College of Business and Technology",
+					"NMIT",
+					"Northec",
+					"NZAAL",
+					"NZIBT",
+					"NZIE",
+					"NZSE",
+					"Otago Polytechnic",
+					"PIHMS",
+					"Southern Institute of Technology",
+					"The University of Auckland",
+					"The University of Otago",
+					"TOI-Ohomai",
+					"UCOL",
+					"Unitec",
+					"University of Waikato Taylors College (Study Group)",
+					"University of Canterbury",
+					"University of Lincoln",
+					"University of Waikato",
+					"UP Education",
+					"Victoria University of Wellington",
+					"Western Instiute of Technology at Taranaki - WITT",
+					"Whitecliffe",
+					"Whiteria & Weltec",
+					"Wintec",
+				],
+			},
+			{
+				country: "Singapore Universities",
+				ddl2: [
+					"Amity Global Instiute",
+					"At Sunrice",
+					"Curtin Singapore managed and operated by Curtin Education Centre Pte Ltd (Navitas)",
+					"James Cook University",
+					"Lasalle College of the Arts",
+					"MDIS",
+					"Navitas English Singapore managed and operated by Curtin Education Centre Pte Ltd (Navitas)",
+					"Ngee Ann Academy Pte Ltd",
+					"PSB Academy",
+					"Raffles Education Network",
+					"SDH Institute",
+					"Singapore Instiute of Management",
+				],
+			},
+			{
+				country: "Ireland Universities",
+				ddl2: [
+					"Dublin City University (Educo International Group)",
+					"Institute of Technology Sligo (Educo International Group)",
+					"Athlone Instiute of Technology",
+					"Dublin International Study Centre (Study Group)",
+					"Dublin Business School",
+					"Dublin City University",
+					"Dublin Institute of Technology (Educo International Group)",
+					"Dundalk Institute of Technology",
+					"Griffith College",
+					"IT Carlow",
+					"Limerick Instiute of Technology",
+					"Maynooth University",
+					"Maynooth University (Educo International Group)",
+					"National College of Ireland",
+					"Trinity College Dublin & Trinity Business School",
+					"University College Cork",
+					"University College Dublin",
+					"Waterford Institute of Technology",
+				],
+			},
+			{
+				country: "Dubai Universities",
+				ddl2: [
+					"Abu Dhabi University",
+					"Amity Education Group",
+					"Curtin University",
+					"Manipal Academy of Higher Education",
+					"Murdoch University (Navitas)",
+					"University of Birmingham",
+					"Heriot Watt University",
+					"HTMI",
+				],
+			},
+			{
+				country: "Germany Universities",
+				ddl2: [
+					"Berlin School of Business and Innovation",
+					"Colonge Business School",
+					"EU Business School",
+					"IUBH University of Applied Science",
+					"Lancaster University, Leipzig (Navitas)",
+					"University of Europe of Applied Science",
+					"Steinbeis School of Management and Innovation",
+					"New European College",
+				],
+			},
+			{
+				country: "USA Universities",
+				ddl2: [
+					"Adelphi University (Shorelight)",
+					"American University (Shorelight)",
+					"Arizona State University (Kaplan International)",
+					"Auburn University (Shorelight)",
+					"Auburn University, Montgomery (Shorelight)",
+					"Clevland State University (Shorelight)",
+					"Duquesne University School",
+					"Florida International University (Shorelight)",
+					"Hult International Business School- All Campuses",
+					"Louisiana State University (Shorelight)",
+					"McKim Business School (Kaplan International)",
+					"Navitas Boca Raton LLC as operator of the FAU Global Student Success Program pathway to Florida Atlantic University 'FAU' (Navitas)",
+					"Navitas Boston LLC as operator of the International Student Success Program at UMass Boston pathway to University of Massachusetts Boston 'UMass Boston' (Navitas)",
+					"Navitas Lowell LLC as operator of Global Student Success Program at UMass Lowell pathway to University of Massachusetts Lowell 'UMass Lowell' (Navitas)",
+					"Navitas New York LLC as operator of the Queens College Global Student Success Program pathway to Queens College, City of New York (Navitas)",
+					"New Jersey Institute of Technology (Educo International Group)",
+					"Northeastern University (Kaplan International)",
+					"Pace University (Kaplan International)",
+					"Richard Bland College lof William and Mary (Navitas)",
+					"SAE Institute of Technology, Chicago (Navitas)",
+					"Seattle Pacific University (Educo International Group)",
+					"Study Group USA Higher Education",
+					"The University of Tulsa (Kaplan International)",
+					"Uniersity of Dayton (Shorelight)",
+					"University of Central Florida (Shorelight)",
+					"University of Illinois at Chicago (Shorelight)",
+					"University of Kansas (Shorelight)",
+					"University of Maryland, Baltimore Count (Educo International Group)",
+					"University of Nebraska–Lincoln (Educo International Group)",
+					"University of North Texas (Educo International Group)",
+					"University of South Alabama (University Marketing Systems)",
+					"Academy of Art University",
+				],
+			},
+			{
+				country: "Canada Universities",
+				ddl2: [
+					"Acsenda School of Management (Educo International Group)",
+					"Arbutus College (Educo International Group)",
+					"Bay River College",
+					"Formation Musictechnic",
+					"Fraser International College in association with Simon Fraser University (Navitas)",
+					"International College of Manitoba pathway to the University of Manitoba (Navitas)",
+					"Ryerson University Intl College (Navitas)",
+					"SAE Institute Inc (Vancouver) (Navitas)",
+					"Seneca College of Arts and Technology",
+					"Study Group Canada Higher Education",
+					"University Canada West (Global University Systems )",
+					"College Avalon",
+					"NORTHWESTEXECUTIVE EDUCATION - Northwood University",
+					"Toronto School of Management - Global University Systems *Condition* 2 months time to perform ",
+					"Cape Breton University (MSM Unify) - *Condition* 2 students to enroll",
+					"LCI Education Network -*Condtion* 2 application and 1 student enrolled on campus",
+					"Selkirk College -(MSQUARE MEDIA) *Condition* 2 students to enroll",
+					"Herzing College",
+				],
+			},
+			{
+				country: "Switzerland Universities",
+				ddl2: [
+					"EU Business School",
+					"Glion Institute of Higher Education - Sommet Education",
+					"HTMI",
+				],
+			},
+			{
+				country: "Italy Universities",
+				ddl2: ["Domus Academy & NA", "Istituto of Marangoni"],
+			},
+			{
+				country: "France Universities",
+				ddl2: ["IDRAC", "QS Quacquarelli Symonds Limited"],
+			},
+			{ country: "Paris Universities", ddl2: ["Istituto of Marangoni"] },
+			{
+				country: "Netherlands Universities",
+				ddl2: [
+					"Holland International Study Centre (Study Group)",
+					"The Hague Pathway College (Navitas)",
+				],
+			},
+			{
+				country: "West Indies Universities",
+				ddl2: ["St. Gerorge's University"],
+			},
+			{
+				country: "Cyprus Universities",
+				ddl2: ["University of Nicosia (Cammino Global Education)"],
+			},
+			{
+				country: "India Universities",
+				ddl2: ["Istituto Marangoni Mumbai Training Centre Private Limited"],
+			},
+		]);
+	}, []);
+
+	function selectChange(e) {
+		setSelectddl(e.target.value);
+		console.log(selectddl);
+		ddl1.find((x) => {
+			if (x.country === e.target.value) {
+				setDdl2(x.ddl2);
+			}
+		});
+		console.log(ddl2);
+		// setDdl2(ddl1.find(x => country === e.target.value).ddl2)
+	}
 
 	return (
 		<div>
-			<Navbar bg="light" expand="lg">
-				<Container>
-					<Navbar.Collapse id="basic-navbar-nav">
-						<Nav className="me-auto">
-							<a href="/dashboard">
-								<img src={Logo} alt="logo" width="100" className="logo" />
-							</a>
-							<Nav.Link href="/references" className="signoutBtn">
-								References
-							</Nav.Link>
-							<Nav.Link
-								onClick={() => firebaseConfig.auth().signOut()}
-								className="signoutBtn"
-							>
-								SignOut
-							</Nav.Link>
+			<AppBar position="fixed">
+				<Toolbar>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/dashboard">
+							{" "}
+							Dashboard
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applicants">
+							{" "}
+							Applicants
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applications">
+							{" "}
+							Applications
+						</a>
+					</Typography>
 
-							<Nav.Link href="/applications" className="signoutBtn">
-								Applications
-							</Nav.Link>
-							<Nav.Link href="/applicants" className="signoutBtn">
-								Applicants
-							</Nav.Link>
-
-							<Nav.Link href="/dashboard" className="signoutBtn">
-								Dashboard
-							</Nav.Link>
-						</Nav>
-					</Navbar.Collapse>
-				</Container>
-			</Navbar>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/references">
+							References
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a
+							style={{ color: "white" }}
+							onClick={() => firebaseConfig.auth().signOut()}
+						>
+							{" "}
+							SignOut
+						</a>
+					</Typography>
+				</Toolbar>
+			</AppBar>
 
 			<br />
 			<br />
+			<br />
+			<br />
+			<br />
+			<br />
 
-			<h3>UK Universities</h3>
+			<select value={selectddl} onChange={selectChange}>
+				<option>Select the university</option>
+				{ddl1 ? ddl1.map((x) => <option>{x.country}</option>) : null}
+			</select>
+
+			<select>
+				<option selected disabled>
+					{" "}
+					select univ
+				</option>
+				{ddl2 ? ddl2.map((x) => <option>{x}</option>) : null}
+			</select>
+
+			{/* <h3>UK Universities</h3>
 			<table>
 				<tr>
 					<th>university name</th>
@@ -6550,7 +6979,6 @@ const AddStudentApplicationUniversity = (props) => {
 
 			<h3>India Universities</h3>
 
-			<table>
 				<tr>
 					<th>university name</th>
 					<th>apply</th>
@@ -6576,6 +7004,8 @@ const AddStudentApplicationUniversity = (props) => {
 					</td>
 				</tr>
 			</table>
+
+						*/}
 		</div>
 	);
 };

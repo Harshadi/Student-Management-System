@@ -8,9 +8,19 @@ import { Details } from "@material-ui/icons";
 import References from "./References";
 import "./style.css";
 import Logo from "../assets/logo.png";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import Container from "react-bootstrap/Container";
+// import Nav from "react-bootstrap/Nav";
+// import Table from 'react-bootstrap/Table'
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Link from '@material-ui/core/Link';
+
 
 const Dashboard = () => {
 	const [loading, setLoading] = useState(false);
@@ -24,13 +34,22 @@ const Dashboard = () => {
 	const [incompleteStatus, setIncompleteStatus] = useState(0);
 	const [completeStatus, setCompleteStatus] = useState(0);
 	const [inProgressStatus, setInProgressStatus] = useState(0);
-	var incomplete = 0;
-	var complete = 0;
-	var completeFinal = 0;
-	var inProgress = 0;
+	
 	const [applications, setApplications] = useState([]);
 	const [statusArray, setStatusArray] = useState([]);
 	const [count, setCount] = useState(0);
+	const [demo, setDemo] = useState([]);
+	const [studentId, setStudentId] = useState([]);
+
+	var complete = 0;
+	var incomplete = 0;
+	var inProgress = 0;
+	const [com, setCom] = useState(0);
+	const [incom, setIncom] = useState(0);
+	const [inprog, setInprog]= useState(0);
+
+
+
 	useEffect(() => {
 		const applications = [];
 		const details = [];
@@ -106,12 +125,7 @@ const Dashboard = () => {
 
 						applications.push(detail.data());
 						console.log("abc", detail.data().applicationStatus);
-						if (detail.data().applicationStatus == "PaymentFormFilled") {
-							complete = complete + 1;
-						}
-						completeFinal = complete;
-						console.log("mno", completeFinal);
-						setCount(completeFinal);
+						
 					});
 					setApplications(applications);
 
@@ -120,9 +134,75 @@ const Dashboard = () => {
 		});
 
 		console.log(applications);
-		console.log(completeFinal);
+		
 		console.log(count);
 	}, []);
+
+
+
+useEffect(() => {
+		const item = [];
+
+		details.map((detail) => {
+			console.log(detail.id);
+			firebaseConfig
+				.firestore()
+				.collection("counselor")
+				.doc(currentUser.uid)
+				.collection("studentDetails")
+				.doc(detail.id)
+				.collection("studentApplications")
+				.get()
+				.then((snapshot) => {
+					snapshot.docs.forEach((detail) => {
+						let currentID = detail.id;
+						let appObj = { ...detail.data(), ["id"]: currentID };
+						//         item.push(appObj);
+
+						item.push(detail.data().applicationStatus);
+						// console.log(item)
+						setStudentId(item);
+					});
+
+					//             console.log('insidethen', studentId);
+					// console.log(item)
+				});
+
+			// console.log('outsidethen', item)
+		});
+
+		setDemo(item);
+		console.log("2nd useeddect", demo);
+	}, [details]);
+
+	useEffect(() => {
+    const timer = setTimeout(() => {
+      demo.forEach((element) => {
+        if (element === "PaymentFormFilled") {
+      //    console.log(element);
+          complete = complete + 1;
+         // console.log(complete);
+          setCom(complete);
+        }
+	else if(element === 'ApplicationFormFilled'){
+		incomplete = incomplete +1
+		setIncom(incomplete)
+	}
+	else if(element === 'AttachmentsFormFilled'){
+	
+	inProgress= inProgress +1
+	setInprog(inProgress)
+	}
+      });
+
+
+    }, 1000);
+    return () => clearTimeout(timer);
+  });
+
+
+
+
 
 	// Start the fetch operation as soon as
 	// the page loads
@@ -159,7 +239,32 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<Navbar bg="light" expand="lg" style={{ backgroundColor: "#40E0D0" }}>
+
+<AppBar position="fixed">
+  <Toolbar>
+    
+    <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/dashboard"> Dashboard</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applicants"> Applicants</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applications"> Applications</a>
+    </Typography>
+
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/references">References</a>
+    </Typography>
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} onClick={() => firebaseConfig.auth().signOut()}> SignOut</a>
+    </Typography>
+
+  
+  </Toolbar>
+</AppBar>
+
+			{/* <Navbar bg="light" expand="lg" style={{ backgroundColor: "#40E0D0" }}>
 				<Container>
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="me-auto">
@@ -189,7 +294,7 @@ const Dashboard = () => {
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
-			</Navbar>
+			</Navbar> */}
 
 			{/* <button
 				className="signoutBtn"
@@ -204,6 +309,9 @@ const Dashboard = () => {
 				Sign out
 			</button> */}
 
+	<a href="/dashboard">
+	<img src={Logo} alt="logo" width="100" className="logo" style={{marginLeft: 70, marginTop: 100}} />
+	</a>
 			<h1 className="welcomeText">Welcome</h1>
 
 			<h3 className="userMail">{currentUser.email}</h3>
@@ -252,7 +360,7 @@ else if(application=="applicationFormFilled"){
 ,
 console.log("complete",complete)
 
-}  */}
+}  
 
 			{
 				(details.map((detail) =>
@@ -285,8 +393,9 @@ console.log("complete",complete)
 			}
 
 			{console.log("countoutside", applications)}
-
-			<table className="studentTable">
+*/}
+			<table striped bordered hover className="studentTable">
+				 
 				<tr className="tableRow">
 					<th className="headingRow">Application Status</th>
 					<th className="headingRow">Number of Applications</th>
@@ -295,8 +404,8 @@ console.log("complete",complete)
 				<tr>
 					<td>Complete</td>
 					<td>
-						{console.log("above complete", completeFinal)}
-						{complete}
+						
+						{com}
 					</td>
 					<td>
 						<a href="/applicationscomplete">View</a>
@@ -305,19 +414,28 @@ console.log("complete",complete)
 
 				<tr>
 					<td>Incomplete</td>
-					<td>{incomplete}</td>
+					<td>{incom}</td>
 					<td>
 						<a href="/applicationsincomplete">View</a>
 					</td>
 				</tr>
 				<tr>
 					<td>In Progress</td>
-					<td>{inProgress}</td>
+					<td>{inprog}</td>
 					<td>
 						<a href="/applicationsinprogress">View</a>
 					</td>
 				</tr>
 			</table>
+
+
+
+
+
+
+
+
+
 		</div>
 	);
 };

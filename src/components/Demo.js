@@ -13,15 +13,19 @@ const Demo = (props) => {
 	const inputEl = useRef("");
 	const [studentId, setStudentId] = useState([]);
 	const [completeApplication, setCompleteApplication] = useState(0);
-	var complete = 0;
-	var incomplete = 1;
-	var inProgress = 1;
+	
 	var applicationFormSubmitted = 0;
 	const item = [];
 	const [posts, setPosts] = useState([]);
 	const [postsAnother, setPostsAnother] = useState([1, 2, 3, 4, 5]);
 	const [demo, setDemo] = useState([]);
+	var complete = 0;
+	var incomplete = 0;
+	var inProgress = 0;
 	const [com, setCom] = useState(0);
+	const [incom, setIncom] = useState(0);
+	const [inprog, setInprog]= useState(0);
+
 
 	useEffect(() => {
 		var applications = [];
@@ -108,25 +112,29 @@ const Demo = (props) => {
 	}, [details]);
 
 	useEffect(() => {
-		console.log("after", demo);
-	demo.map((item)=>{
-		console.log(item)
-	})
-		demo.map((hii) => {
-			console.log("third useeffect", hii);
-			if (hii === "PaymentFormFilled") {
-				console.log(hii);
-				complete = complete + 1;
-				console.log(complete);
-				setCom(complete);
-			}
-		});
-
+    const timer = setTimeout(() => {
+      demo.forEach((element) => {
+        if (element === "PaymentFormFilled") {
+      //    console.log(element);
+          complete = complete + 1;
+         // console.log(complete);
+          setCom(complete);
+        }
+	else if(element === 'ApplicationFormFilled'){
+		incomplete = incomplete +1
+		setIncom(incomplete)
+	}
+	else if(element === 'AttachmentsFormFilled'){
 	
+	inProgress= inProgress +1
+	setInprog(inProgress)
+	}
+      });
 
-		console.log("3rd useeffect");
-	}, [demo, details]);
 
+    }, 1000);
+    return () => clearTimeout(timer);
+  });
 
 
 
@@ -136,8 +144,8 @@ const Demo = (props) => {
 
 	return (
 		<div>
-			{console.log("zuzi", complete, com)}
-			{/* 
+			{/*{console.log("zuzi", complete, com)}
+			 
 
 {
 console.log("returnpostdata",posts)
@@ -235,14 +243,14 @@ demo.map((key)=>{
 
 				<tr>
 					<td>Incomplete</td>
-					<td>{incomplete}</td>
+					<td>{incom}</td>
 					<td>
 						<a href="/applicationsincomplete">View</a>
 					</td>
 				</tr>
 				<tr>
 					<td>In Progress</td>
-					<td>{inProgress}</td>
+					<td>{inprog}</td>
 					<td>
 						<a href="/applicationsinprogress">View</a>
 					</td>

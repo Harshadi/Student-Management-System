@@ -3,9 +3,18 @@ import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "./Auth";
 import firebaseConfig from "../config.js";
 import Logo from "../assets/logo.png";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import Container from "react-bootstrap/Container";
+// import Nav from "react-bootstrap/Nav";
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Link from '@material-ui/core/Link';
+
 
 const EditStudent = (props) => {
 	const location = useLocation();
@@ -218,7 +227,32 @@ const EditStudent = (props) => {
 
 	return (
 		<>
-			<Navbar bg="light" expand="lg">
+
+
+<AppBar position="fixed">
+  <Toolbar>
+    
+    <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/dashboard"> Dashboard</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applicants"> Applicants</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applications"> Applications</a>
+    </Typography>
+
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/references">References</a>
+    </Typography>
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} onClick={() => firebaseConfig.auth().signOut()}> SignOut</a>
+    </Typography>
+
+  
+  </Toolbar>
+</AppBar>
+			{/* <Navbar bg="light" expand="lg">
 				<Container>
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="me-auto">
@@ -246,7 +280,7 @@ const EditStudent = (props) => {
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
-			</Navbar>
+			</Navbar> */}
 			<header>
 				{/* add student form */}
 

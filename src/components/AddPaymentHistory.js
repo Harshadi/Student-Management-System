@@ -8,10 +8,36 @@ import { Details } from "@material-ui/icons";
 import References from "./References";
 import "./style.css";
 import Logo from "../assets/logo.png";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import Container from "react-bootstrap/Container";
+// import Nav from "react-bootstrap/Nav";
 import Applications from "./Applications";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker-cssmodules.css";
+// import Calendar from "react-calendar";
+// import "react-calendar/dist/Calendar.css";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+	MuiPickersUtilsProvider,
+	KeyboardTimePicker,
+	KeyboardDatePicker,
+} from "@material-ui/pickers";
+import "date-fns";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const AddPaymentHistory = (props) => {
 	const history = useHistory();
@@ -19,7 +45,7 @@ const AddPaymentHistory = (props) => {
 	const [id, setId] = useState("");
 	const [details, setDetails] = useState([]);
 	console.log(props.location.state);
-	const [paymentDate, setPaymentDate] = useState("");
+	const [paymentDate, setPaymentDate] = useState(new Date());
 	const [paymentAmount, setPaymentAmount] = useState("");
 	const [paymentMode, setPaymentMode] = useState("");
 	const [applicationStatusId, setApplicationStatusId] = useState("");
@@ -56,9 +82,10 @@ const AddPaymentHistory = (props) => {
 		setPaymentDate(paymentDate);
 		setPaymentAmount(paymentAmount);
 		setPaymentMode(paymentMode);
+		console.log(paymentDate);
 
 		try {
-			const db = firebaseConfig.firestore();
+			const db = firebaseConfig.firestorae();
 			var currentUser = firebaseConfig.auth().currentUser;
 			db.collection("counselor")
 				.doc(currentUser.uid)
@@ -79,20 +106,6 @@ const AddPaymentHistory = (props) => {
 					applicationStatus: "complete",
 				});
 
-			applicationStatusDetails.map((applicationStatusDetail) => {
-				console.log("eachstatus", applicationStatusDetail.applicationStatus);
-				db.collection("counselor")
-					.doc(currentUser.uid)
-					.collection("studentDetails")
-					.doc(props.location.state.detail)
-					.collection("studentApplications")
-
-					.doc(applicationStatusDetail.id)
-					.update({
-						applicationStatus: "PaymentFormFilled",
-					});
-			});
-
 			alert("Payment Details Added Successfully");
 			console.log("payment added");
 			history.push({
@@ -104,9 +117,51 @@ const AddPaymentHistory = (props) => {
 			console.log(err);
 		}
 	}
+	const handleChange = (paymentDate) => {
+		setPaymentDate(paymentDate);
+		console.log(paymentDate);
+	};
 	return (
 		<div>
-			<Navbar bg="light" expand="lg">
+			<AppBar position="fixed">
+				<Toolbar>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/dashboard">
+							{" "}
+							Dashboard
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applicants">
+							{" "}
+							Applicants
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applications">
+							{" "}
+							Applications
+						</a>
+					</Typography>
+
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/references">
+							References
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a
+							style={{ color: "white" }}
+							onClick={() => firebaseConfig.auth().signOut()}
+						>
+							{" "}
+							SignOut
+						</a>
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			{/* <Navbar bg="light" expand="lg">
 				<Container>
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="me-auto">
@@ -133,7 +188,11 @@ const AddPaymentHistory = (props) => {
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
-			</Navbar>
+			</Navbar> */}
+			<br />
+			<br />
+			<br />
+			<br />
 
 			<div>
 				<section className="signup">
@@ -142,21 +201,40 @@ const AddPaymentHistory = (props) => {
 							<h2 className="AddStudentTitle">Add Payment Details</h2>
 							<div className="AddStudentformBody">
 								<form className="addStudentFormBody" onSubmit={handleSubmit}>
-									<input
-										className="AddStudentInput"
-										type="text"
-										name="paymentDate"
-										placeholder="Date of the payment done"
+									<MuiPickersUtilsProvider utils={DateFnsUtils}>
+										<Grid container justifyContent="space-around">
+											<KeyboardDatePicker
+												disableToolbar
+												variant="inline"
+												format="MM/dd/yyyy"
+												margin="normal"
+												id="date-picker-inline"
+												label="Date of the Payment"
+												value={paymentDate}
+												paymentDate={paymentDate}
+												onChange={handleChange}
+												KeyboardButtonProps={{
+													"aria-label": "change date",
+												}}
+											/>
+										</Grid>
+									</MuiPickersUtilsProvider>
+
+									{/* <Calendar
 										paymentDate={paymentDate}
 										value={paymentDate}
-										onChange={(e) => setPaymentDate(e.target.value)}
-									/>
+										name="paymentDate"
+										onChange={handleChange}
+									/> */}
+
 									<br />
 									<br />
 
 									<input
 										className="AddStudentInput"
 										type="text"
+										pattern="\d*"
+										maxlength="4"
 										name="paymentAmount"
 										placeholder="Amount of the payment done"
 										paymentAmount={paymentAmount}
@@ -166,7 +244,7 @@ const AddPaymentHistory = (props) => {
 									<br />
 									<br />
 
-									<input
+									{/*		<input
 										className="AddStudentInput"
 										type="text"
 										name="paymentMode"
@@ -174,7 +252,44 @@ const AddPaymentHistory = (props) => {
 										paymentMode={paymentMode}
 										value={paymentMode}
 										onChange={(e) => setPaymentMode(e.target.value)}
-									/>
+									/> */}
+
+									<br />
+
+									<FormControl style={{ minWidth: 150 }}>
+										<InputLabel id="demo-simple-select-helper-label">
+											Payment Mode
+										</InputLabel>
+										<Select
+											labelId="demo-simple-select-helper-label"
+											id="demo-simple-select-helper"
+											value={paymentMode}
+											paymentMode={paymentMode}
+											onChange={(e) => setPaymentMode(e.target.value)}
+										>
+											<MenuItem value="">
+												<em>None</em>
+											</MenuItem>
+											<MenuItem value={"NEFT"}>NEFT</MenuItem>
+											<MenuItem value={"IMPS"}>IMPS</MenuItem>
+											<MenuItem value={"Cash /Cheque"}>Cash / Cheque</MenuItem>
+										</Select>
+										<FormHelperText></FormHelperText>
+									</FormControl>
+									{/* <Dropdown>
+										<Dropdown.Toggle variant="success" id="dropdown-basic">
+											Choose mode of payment
+										</Dropdown.Toggle>
+
+										<Dropdown.Menu>
+											<Dropdown.Item href="#/action-1">NEFT</Dropdown.Item>
+											<Dropdown.Item href="#/action-2">IMPS</Dropdown.Item>
+											<Dropdown.Item href="#/action-3">
+												Cheque / Cash
+											</Dropdown.Item>
+										</Dropdown.Menu>
+									</Dropdown> */}
+
 									<br />
 									<br />
 
