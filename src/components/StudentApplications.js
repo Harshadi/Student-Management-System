@@ -11,7 +11,7 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
+import {withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +19,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const StudentApplications = (props) => {
 	const history = useHistory();
@@ -87,6 +94,33 @@ setDoc(snapshot.data())
 		}
 	};
 
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+
+
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+
+
+
+
 	return (
 		<div>
 
@@ -154,6 +188,13 @@ setDoc(snapshot.data())
 			<br />
 			<br />
 			<h2 className="studentDetailsSection">Student Applications :</h2>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{float: 'right'}}>
+        Back
+      </Button>
+<br />
+			
+			<br />
+			<br />
 
 			<div style={{ textAlign: "center" }}>
 				<h4>
@@ -196,26 +237,31 @@ setDoc(snapshot.data())
 
 			{/* Application details with table */}
 
-			<table className="studentTable">
-				<tr className="tableRow">
-					<th className="headingRow">Student Name</th>
+			 <TableContainer component={Paper}>
+      <Table style={{minWidth: 700}} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+					<StyledTableCell>Student Name</StyledTableCell>
 
-					<th className="headingRow">Citizenship</th>
-					<th className="headingRow">Course</th>
-					<th className="headingRow">Application Status</th>
-				</tr>
-
+					<StyledTableCell>Citizenship</StyledTableCell>
+					<StyledTableCell>Course</StyledTableCell>
+					<StyledTableCell>Application Status</StyledTableCell>
+				 </TableRow>
+        </TableHead>
+  <TableBody>
 				{searchTerm.length < 1
 					? details.map((detail) => (
-							<tr className="tableRow">
-								<td className="headingRow">{detail.candidateName}</td>
-								<td className="headingRow">{detail.birthCountry}</td>
-								<td className="headingRow"> {detail.programName}</td>
-								<td className="headingRow"> {doc.applicationStatus}</td>
-							</tr>
+							 <StyledTableRow >
+								<StyledTableCell component="th" scope="row">{detail.candidateName}</StyledTableCell>
+							<StyledTableCell align="right">{detail.birthCountry}</StyledTableCell>
+								<StyledTableCell align="right"> {detail.programName}</StyledTableCell>
+								<StyledTableCell align="right"> {doc.applicationStatus}</StyledTableCell>
+							</StyledTableRow>
 					  ))
 					: null}
-			</table>
+			   </TableBody>
+      </Table>
+    </TableContainer>
 		</div>
 	);
 };

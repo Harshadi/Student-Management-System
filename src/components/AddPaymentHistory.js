@@ -85,7 +85,7 @@ const AddPaymentHistory = (props) => {
 		console.log(paymentDate);
 
 		try {
-			const db = firebaseConfig.firestorae();
+			const db = firebaseConfig.firestore();
 			var currentUser = firebaseConfig.auth().currentUser;
 			db.collection("counselor")
 				.doc(currentUser.uid)
@@ -296,6 +296,12 @@ const AddPaymentHistory = (props) => {
 									<button className="addStudentSubmitBtn" type="submit">
 										Submit the Payment Details
 									</button>
+<br/><br/>
+<div style={{textAlign: 'center'}}>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{ minWidth: 250}}>
+        Back
+      </Button>
+</div>
 								</form>
 							</div>
 						</div>

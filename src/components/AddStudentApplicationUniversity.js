@@ -7,8 +7,8 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import Select from "react-select";
-import data from "./data.json";
+// import Select from "react-select";
+ // import data from "./data.json";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -46,6 +46,7 @@ const AddStudentApplicationUniversity = (props) => {
 	const [ddl1, setDdl1] = useState([]);
 	const [ddl2, setDdl2] = useState([]);
 	const [selectddl, setSelectddl] = useState("");
+	const [ universityName, setUniversityName] = useState("")
 	useEffect(() => {
 		setDdl1([
 			{
@@ -478,8 +479,77 @@ const AddStudentApplicationUniversity = (props) => {
 			<br />
 			<br />
 			<br />
+<div style={{textAlign: 'center'}}>
+<h3>Please choose the university the applicant wants to enroll in :</h3> <br/>
+<FormControl variant="outlined" style={{ minWidth: 250}}>
+        <InputLabel id="demo-simple-select-outlined-label">Select the Country</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={selectddl} onChange={selectChange}
+          label="Select the Country"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+         {ddl1 ? ddl1.map((x) => <MenuItem value={x.country}>{x.country}</MenuItem>) : null}
+        </Select>
+      </FormControl>
+</div>
+<br/>
+<br/>
+<br/>
+<div style={{textAlign: 'center'}}>
+<FormControl variant="outlined" style={{ minWidth: 250}}>
+        <InputLabel id="demo-simple-select-outlined-label">Select the University</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={universityName	} 
+	  onChange={(e)=>setUniversityName(e.target.value)}
+          label="Select the University"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+        {ddl2 ? ddl2.map((x) => <MenuItem value={x}>{x}</MenuItem>) : null}
+        </Select>
+      </FormControl>
+</div>
+<br/> <br/><br/>
+<div style={{textAlign: 'center'}}>
+<Button variant="contained" color="primary" style={{padding: 15, minWidth: 250}}
+onClick={(event) =>{
+console.log('univ',universityName)
+								history.push({
+									pathname: "/addstudentapplications",
+									detail: props.location.state.detail,
+									//univ: "adton",
+									state: {
+										detail: props.location.state.detail,
+										univ: universityName,
+									},
+								})
+}
+							}
+>
+  Proceed
+</Button>
 
-			<select value={selectddl} onChange={selectChange}>
+</div> <br/><br/>
+<div style={{textAlign: 'center'}}>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{padding: 15, minWidth: 250}}>
+        Back
+      </Button>
+</div>
+<br />
+			
+			<br />
+			<br />
+
+
+
+		{/*	<select value={selectddl} onChange={selectChange}>
 				<option>Select the university</option>
 				{ddl1 ? ddl1.map((x) => <option>{x.country}</option>) : null}
 			</select>
@@ -492,7 +562,8 @@ const AddStudentApplicationUniversity = (props) => {
 				{ddl2 ? ddl2.map((x) => <option>{x}</option>) : null}
 			</select>
 
-			{/* <h3>UK Universities</h3>
+
+			 <h3>UK Universities</h3>
 			<table>
 				<tr>
 					<th>university name</th>

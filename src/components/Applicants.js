@@ -12,7 +12,8 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
+
+import {withStyles,  makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 
 function Applicants() {
@@ -69,6 +77,32 @@ function Applicants() {
 			setSearchResults(details);
 		}
 	};
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+
+
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+
+
+
 
 	return (
 		<div>
@@ -133,7 +167,16 @@ function Applicants() {
 			<br />
 			<br />
 			<br />
-			<h2 className="studentDetailsSection">Your Applicants :</h2>
+<div style={{flex: 1, flexDirection: 'row'}}>
+		<div>	<h2 className="studentDetailsSection">Your Applicants :</h2></div>
+		<div>	 <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{float: 'right'}}>
+        Back
+      </Button> </div>
+</div>
+<br />
+			
+			<br />
+			<br />
 
 			<div style={{ textAlign: "center" }}>
 				<h4>
@@ -159,33 +202,33 @@ function Applicants() {
 
 			{/* Applicants details with table */}
 
-			<table className="studentTable">
-				<tr className="tableRow">
-					<th className="headingRow">Student Name</th>
-					<th className="headingRow">Student Email</th>
-					<th className="headingRow">Student Phone</th>
-					<th className="headingRow">Citizenship</th>
-					<th className="headingRow">Course</th>
-					<th className="headingRow">Application Status</th>
-					{/* <th className="headingRow">
-		Application Date Created
-	</th>
-	<th className="headingRow">
-		Shortlisted University
-	</th> */}
-				</tr>
+			 <TableContainer component={Paper}>
+      <Table style={{minWidth: 700}} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+					<StyledTableCell>Student Name</StyledTableCell>
+					<StyledTableCell>Student Email</StyledTableCell>
+					<StyledTableCell>Student Phone</StyledTableCell>
+					<StyledTableCell>Citizenship</StyledTableCell>
+					<StyledTableCell>Course</StyledTableCell>
+					<StyledTableCell>Application Status</StyledTableCell>
+					<StyledTableCell>View</StyledTableCell>
+					<StyledTableCell></StyledTableCell>
+				 </TableRow>
+        </TableHead>
+        <TableBody>
 
 				{searchTerm.length < 1 ? (
 					details.map((detail) => (
-						<tr className="tableRow">
-							<td className="headingRow">{detail.studentName}</td>
+						 <StyledTableRow >
+							<StyledTableCell component="th" scope="row">{detail.studentName} </StyledTableCell>
 
-							<td className="headingRow">{detail.studentEmail}</td>
-							<td className="headingRow">{detail.studentPhone}</td>
-							<td className="headingRow"> {detail.citizenship}</td>
-							<td className="headingRow"> {detail.studentCourse}</td>
-							<td className="headingRow"> {detail.applicationStatus}</td>
-							<td>
+							 <StyledTableCell align="right">{detail.studentEmail}</StyledTableCell>
+							 <StyledTableCell align="right">{detail.studentPhone}</StyledTableCell>
+							 <StyledTableCell align="right"> {detail.citizenship}</StyledTableCell>
+							 <StyledTableCell align="right">{detail.studentCourse}</StyledTableCell>
+							 <StyledTableCell align="right">{detail.applicationStatus}</StyledTableCell>
+							 <StyledTableCell align="right">
 								<a
 									onClick={(event) =>
 										firebaseConfig
@@ -207,8 +250,8 @@ function Applicants() {
 								>
 									View
 								</a>
-							</td>
-							<td>
+							</StyledTableCell>
+							 <StyledTableCell align="right">
 								{" "}
 								<EditIcon
 									className="editIcon"
@@ -242,21 +285,21 @@ function Applicants() {
 											.delete()
 									}
 								/>
-							</td>
-						</tr>
+							</StyledTableCell>
+						  </StyledTableRow>
 					))
 				) : (
 					<>
 						{" "}
 						{searchResults.map((detail) => (
-							<tr className="tableRow">
-								<td className="headingRow">{detail.studentName}</td>
-								<td className="headingRow">{detail.studentEmail}</td>
-								<td className="headingRow">{detail.studentPhone}</td>
-								<td className="headingRow"> {detail.citizenship}</td>
-								<td className="headingRow"> {detail.studentCourse}</td>
-								<td className="headingRow"> {detail.applicationStatus}</td>
-								<td>
+							 <StyledTableRow >
+								<StyledTableCell align="right">{detail.studentName}</StyledTableCell>
+								<StyledTableCell align="right">{detail.studentEmail}</StyledTableCell>
+								<StyledTableCell align="right">{detail.studentPhone}</StyledTableCell>
+								<StyledTableCell align="right"> {detail.citizenship}</StyledTableCell>
+								<StyledTableCell align="right">{detail.studentCourse}</StyledTableCell>
+								<StyledTableCell align="right">{detail.applicationStatus}</StyledTableCell>
+								<StyledTableCell align="right">
 									{" "}
 									<a
 										onClick={(event) =>
@@ -279,8 +322,8 @@ function Applicants() {
 									>
 										View
 									</a>
-								</td>
-								<td>
+								</StyledTableCell>
+								<StyledTableCell align="right">
 									{" "}
 									<EditIcon
 										className="editIcon"
@@ -314,12 +357,14 @@ function Applicants() {
 												.delete()
 										}
 									/>
-								</td>
-							</tr>
+								</StyledTableCell>
+							 </StyledTableRow >
 						))}
 					</>
 				)}
-			</table>
+			   </TableBody>
+      </Table>
+    </TableContainer>
 		</div>
 	);
 }

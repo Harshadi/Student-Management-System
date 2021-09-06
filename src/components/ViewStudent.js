@@ -11,7 +11,7 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
+import {withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +19,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 
 const ViewStudent = (props) => {
 	const location = useLocation();
@@ -80,6 +88,30 @@ const ViewStudent = (props) => {
 		}
 		// console.log(props.location.state.detail);
 	}, []);
+
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+
+
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
 
 	return (
 		<div>
@@ -147,6 +179,14 @@ const ViewStudent = (props) => {
 			
 			<br />
 			<br />
+
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{float: 'right'}}>
+        Back
+      </Button>
+<br />
+			
+			<br />
+			<br />
 			<div>
 				<div style={{ display: "flex", marginLeft: 10 }}>
 					<h5 style={{ marginLeft: 30 }}>
@@ -200,54 +240,59 @@ const ViewStudent = (props) => {
 				<br />
 				<br />
 				<br />
-				<table>
-					<tr>
-						<td>Student Name</td>
-						<td>{details.studentName}</td>
-					</tr>
+				 <TableContainer component={Paper}>
+      <Table style={{minWidth: 700}} aria-label="customized table">
+<TableBody>
 
-					<tr>
-						<td>Student Email</td>
-						<td>{details.studentEmail}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Student Name</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.studentName}</StyledTableCell>
+					</StyledTableRow >
 
-					<tr>
-						<td>Application Status</td>
-						<td>{details.applicationStatus}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Student Email</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.studentEmail}</StyledTableCell>
+					</StyledTableRow >
 
-					<tr>
-						<td>Citizenship</td>
-						<td>{details.citizenship}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Application Status</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.applicationStatus}</StyledTableCell>
+					</StyledTableRow >
 
-				{/*	<tr>
-						<td>Date of Application</td>
-						<td>{details.dateOfApplication}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Citizenship</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.citizenship}</StyledTableCell>
+					</StyledTableRow >
+
+				{/*	<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Date of Application</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.dateOfApplication}</StyledTableCell>
+					</StyledTableRow >
 
 				*/}
-					<tr>
-						<td>DOB</td>
-						<td>{details.dateOfBirth}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">DOB</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.dateOfBirth}</StyledTableCell>
+					</StyledTableRow >
 
-			{/*		<tr>
-						<td>Student City</td>
-						<td>{details.studentCity}</td>
-					</tr>
+			{/*		<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Student City</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.studentCity}</StyledTableCell>
+					</StyledTableRow >
 				
-					<tr>
-						<td>Course</td>
-						<td>{details.studentCourse}</td>
-					</tr>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Course</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.studentCourse}</StyledTableCell>
+					</StyledTableRow >
 			*/}
 
-					<tr>
-						<td>Student Phone Number</td>
-						<td>{details.studentPhone}</td>
-					</tr>
-				</table>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">Student Phone Number</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{details.studentPhone}</StyledTableCell>
+					</StyledTableRow >
+				   </TableBody>
+      </Table>
+    </TableContainer>
 
 				<br />
 			</div>

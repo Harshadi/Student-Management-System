@@ -12,7 +12,7 @@ import Logo from "../assets/logo.png";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
 import { storage } from "../config.js";
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles,makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,7 +20,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
-
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const Attachments = (props) => {
 	const history = useHistory();
@@ -114,6 +121,7 @@ const Attachments = (props) => {
 	const handleImageAsFile = (e) => {
 		const image = e.target.files[0];
 		setImageAsFile((imageFile) => image);
+		console.log('run',imageAsFile)
 	};
 
 	const handleFireBaseUpload = (e) => {
@@ -200,7 +208,9 @@ const Attachments = (props) => {
 
 			console.log("firestore uploaded");
 			alert("File uploaded");
-
+			console.log('url', imageAsUrl)
+			console.log('url.url',imageAsUrl.imgUrl )
+			
 			history.push({
 				pathname: "/attachments",
 				detail: props.location.state.detail,
@@ -210,6 +220,34 @@ const Attachments = (props) => {
 			console.log(err);
 		}
 	};
+
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+
+
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+
+
+
+
 
 	return (
 		<div>
@@ -281,41 +319,123 @@ const Attachments = (props) => {
 <br />
 			<br /><br />
 			<br />
-
-			<table>
-				<tr>
-					<th>Last uploaded date</th>
-					<th>Size</th>
-					<th>File Name</th>
-					<th>Category</th>
-					<th>View</th>
-				</tr>
-				<tr></tr>
+				 <TableContainer component={Paper}>
+			 <Table style={{minWidth: 700}} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+					<StyledTableCell>Last uploaded date</StyledTableCell>
+					<StyledTableCell>Size</StyledTableCell>
+					<StyledTableCell>File Name</StyledTableCell>
+					<StyledTableCell>Category</StyledTableCell>
+					<StyledTableCell>View</StyledTableCell>
+				 </TableRow>
+        </TableHead>
+        <TableBody>
 				{details.map((detail) => (
-					<tr>
-						<td>{Date(detail.lastModifiedDate.nanoseconds)}</td>
-						<td>{detail.size}</td>
-						<td>{detail.name}</td>
-						<td>{detail.type}</td>
-						<td>
+					<StyledTableRow >
+						<StyledTableCell component="th" scope="row">{ new Date(detail.lastModifiedDate)}</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{detail.size}</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{detail.name}</StyledTableCell>
+						<StyledTableCell component="th" scope="row">{detail.type}</StyledTableCell>
+						<StyledTableCell component="th" scope="row">
 							<img src={imageAsUrl.imgUrl} alt="image tag" />
-						</td>
-					</tr>
+						</StyledTableCell>
+					 </StyledTableRow>
 				))}
-			</table>
+			 </TableBody>
+      </Table>
+    </TableContainer>
 
 			<br />
 			<br />
 			<br />
-			<form className="formBody" onSubmit={handleFireBaseUpload}>
-				<input
+
+
+
+
+ <div style={{textAlign: 'center'}}>
+      <input
+        accept="image/*"
+        style={{display: 'none'}}
+        id="contained-button-file"
+        multiple
+        type="file"
+		onChange={handleImageAsFile}
+      />
+      <label htmlFor="contained-button-file">
+        <Button 
+		onClick={console.log('hii')}
+		variant="contained" color="primary" component="span">
+          Upload
+        </Button>
+      </label>
+      <input
+	 onChange={handleImageAsFile} 
+	  accept="image/*" style={{display: 'none'}} id="icon-button-file" type="file" />
+      <label htmlFor="icon-button-file">
+        <IconButton color="primary" aria-label="upload picture" component="span">
+          <PhotoCamera />
+        </IconButton>
+      </label>
+    </div>
+
+
+<br/>
+<div style={{textAlign: 'center'}}>
+<Button variant="contained" color="primary" onClick={handleFireBaseUpload}>
+        Upload Document
+      </Button>
+	  </div>
+<br/><br/>
+
+<div style={{textAlign: 'center'}}>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{ minWidth: 180}}>
+        Back
+      </Button>
+</div>
+
+
+<img src={imageAsUrl.imgUrl} alt="image tag" />
+
+{/*
+
+
+			 <form className="formBody" onSubmit={handleFireBaseUpload}>
+<input
+        accept="image/*"
+        style={{display: 'none'}}
+        id="contained-button-file"
+        multiple
+        type="file"
+		onChange={console.log('clicked')}
+		
+      />
+      <label htmlFor="contained-button-file">
+        <Button
+		
+		variant="contained" color="primary" component="span">
+          Upload
+        </Button>
+      </label>
+      <input accept="image/*" style={{display: 'none'}} id="icon-button-file" type="file" />
+      <label htmlFor="icon-button-file">
+        <IconButton
+		onChange={handleImageAsFile}
+		color="primary" aria-label="upload picture" component="span">
+          <PhotoCamera />
+        </IconButton>
+      </label>
+				 <input
 					className="loginInput"
 					type="file"
 					onChange={handleImageAsFile}
-				/>
+				/> 
 				<br /> <br />
-				<button className="loginSubmitBtn">upload the document</button>
-			</form>
+				 <button className="loginSubmitBtn">upload the document</button> 
+<Button variant="contained" color="primary">
+        Primary
+      </Button>
+			</form> */}
 			{/*
 <img src={imageAsUrl.imgUrl} alt="image tag" />
 */}

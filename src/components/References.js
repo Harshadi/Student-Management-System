@@ -1,4 +1,16 @@
-import React from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { Redirect, useHistory } from "react-router-dom";
+import { AuthContext } from "./Auth";
+import firebaseConfig from "../config.js";
+
+import {withStyles,  makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Link from '@material-ui/core/Link';
 import Img1 from "../assets/BESBI.jpg";
 import Img2 from "../assets/ASTON-UNIVERSITY.png";
 import Img3 from "../assets/AT-SUNRICE.jpg";
@@ -45,11 +57,52 @@ import Img43 from "../assets/UNIVERSITY-OF-SYDNEY.jpg";
 import "./style.css";
 
 function References() {
+const history = useHistory();
+const { currentUser } = useContext(AuthContext);
+if (!currentUser) {
+		return <Redirect to="/login" />;
+	}
 	return (
 		<div className="referenceBody">
+
+
+<AppBar position="fixed">
+  <Toolbar>
+    
+    <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/dashboard"> Dashboard</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applicants"> Applicants</a>
+    </Typography>
+ <Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/applications"> Applications</a>
+    </Typography>
+
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} href="/references">References</a>
+    </Typography>
+<Typography  variant="h6" style={{flexGrow: 1}}>
+    <a style={{color: 'white'}} onClick={() => firebaseConfig.auth().signOut()}> SignOut</a>
+    </Typography>
+
+  
+  </Toolbar>
+</AppBar>
+
+
+
 			<br />
+			<br /><br />
+			<br /><br />
 			<br />
-			<img src={Img2} alt="Sample photo" />
+<div style={{textAlign: 'center'}}>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{ float : 'right'}}>
+        Back
+      </Button>
+</div>
+	<br /><br /><br /><br />	
+	<img src={Img2} alt="Sample photo" />
 			<img src={Img1} alt="Sample photo" />
 			<img src={Img3} alt="Sample photo" />
 			<img src={Img4} alt="Sample photo" />

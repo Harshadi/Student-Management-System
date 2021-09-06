@@ -11,7 +11,7 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
+import {withStyles,  makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,7 +19,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
-
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const PaymentHistory = (props) => {
 	const history = useHistory();
@@ -71,6 +77,36 @@ const PaymentHistory = (props) => {
 			setSearchResults(details);
 		}
 	};
+
+
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+
+
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+
+
+
+
+
 
 	return (
 		<div>
@@ -139,6 +175,11 @@ const PaymentHistory = (props) => {
 			<br />
 
 			<h2 className="studentDetailsSection">Payment History :</h2>
+<div style={{textAlign: 'center'}}>
+ <Button variant="contained" color="primary" onClick={() => history.goBack()} style={{float: 'right'}}>
+        Back
+      </Button>
+</div>
 
 			<div style={{ textAlign: "center" }}>
 				<h4>
@@ -181,37 +222,45 @@ const PaymentHistory = (props) => {
 
 			{/* Application details with table */}
 
-			<table className="studentTable">
-				<tr className="tableRow">
-					<th className="headingRow">Payment Date</th>
+			 <TableContainer component={Paper}>
+      <Table style={{minWidth: 700}} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+					<StyledTableCell>Payment Date</StyledTableCell>
 
-					<th className="headingRow">Payment Amount</th>
-					<th className="headingRow">Payment Mode</th>
-				</tr>
+					<StyledTableCell>Payment Amount</StyledTableCell>
+					<StyledTableCell>Payment Mode</StyledTableCell>
+				 </TableRow>
+        </TableHead>
+  <TableBody>
+
+  {console.log(details)}
 
 				{searchTerm.length < 1 ? (
 					details.map((detail) => (
-						<tr className="tableRow">
-							<td className="headingRow">{detail.paymentDate}</td>
+						 <StyledTableRow >
+							<StyledTableCell align="right">{Date(detail.paymentDate.nanoseconds)}</StyledTableCell>
 
-							<td className="headingRow"> {detail.paymentAmount}</td>
-							<td className="headingRow"> {detail.paymentMode}</td>
-						</tr>
+							<StyledTableCell align="right">{detail.paymentAmount}</StyledTableCell>
+							<StyledTableCell align="right">{detail.paymentMode}</StyledTableCell>
+						</StyledTableRow>
 					))
 				) : (
 					<>
 						{" "}
 						{searchResults.map((detail) => (
-							<tr className="tableRow">
-								<td className="headingRow">{detail.paymentDate}</td>
+							 <StyledTableRow >
+								<StyledTableCell align="right">{Date(detail.paymentDate.nanoseconds)}</StyledTableCell>
 
-								<td className="headingRow"> {detail.paymentAmount}</td>
-								<td className="headingRow"> {detail.paymentMode}</td>
-							</tr>
+								<StyledTableCell align="right"> {detail.paymentAmount}</StyledTableCell>
+								<StyledTableCell align="right">{detail.paymentMode}</StyledTableCell>
+							</StyledTableRow>
 						))}
 					</>
 				)}
-			</table>
+			 </TableBody>
+      </Table>
+    </TableContainer>
 		</div>
 	);
 };

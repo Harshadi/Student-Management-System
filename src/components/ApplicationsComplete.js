@@ -11,7 +11,7 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
+import {withStyles,   makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +19,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from '@material-ui/core/Link';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 function ApplicationsComplete() {
 	const history = useHistory();
@@ -42,7 +49,7 @@ function ApplicationsComplete() {
 					let appObj = { ...detail.data(), ["id"]: currentID };
 					details.push(appObj);
 
-					details.push(detail.data());
+				//	details.push(detail.data());
 				});
 				setDetails(details);
 				console.log(details);
@@ -67,6 +74,31 @@ function ApplicationsComplete() {
 			setSearchResults(details);
 		}
 	};
+
+
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+
+
+
 
 	return (
 		<div>
@@ -145,31 +177,36 @@ function ApplicationsComplete() {
 
 			{/* Application details with table */}
 
-			<table className="studentTable">
-				<tr className="tableRow">
-					<th className="headingRow">Student Name</th>
+			<TableContainer component={Paper}>
+      <Table style={{minWidth: 700}} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+					<StyledTableCell>Student Name</StyledTableCell>
 
-					<th className="headingRow">Citizenship</th>
-					<th className="headingRow">Course</th>
-					<th className="headingRow">Application Status</th>
+					<StyledTableCell>Citizenship</StyledTableCell>
+				{/*	<StyledTableCell>Course</StyledTableCell>  */}
+					<StyledTableCell>Application Status</StyledTableCell>
 					{/* <th className="headingRow">
 		Application Date Created
-	</th>
-	<th className="headingRow">
+	</StyledTableCell>
+	<StyledTableCell>
 		Shortlisted University
-	</th> */}
-				</tr>
+	</StyledTableCell> */}
+<StyledTableCell>  </StyledTableCell>
+				  </TableRow>
+        </TableHead>
+        <TableBody>
 
 				{searchTerm.length < 1 ? (
 					details.map((detail) =>
-						detail.applicationStatus == "Complete" ? (
-							<tr className="tableRow">
-								<td className="headingRow">{detail.studentName}</td>
+						detail.applicationStatus == "complete" ? (
+							<StyledTableRow >
+								 <StyledTableCell component="th" scope="row">{detail.studentName}</StyledTableCell>
 
-								<td className="headingRow"> {detail.citizenship}</td>
-								<td className="headingRow"> {detail.studentCourse}</td>
-								<td className="headingRow"> {detail.applicationStatus}</td>
-								<td>
+								<StyledTableCell align="right">  {detail.citizenship}</StyledTableCell>
+						{/*		<StyledTableCell align="right"> {detail.studentCourse}</StyledTableCell>   */}
+								<StyledTableCell align="right">  {detail.applicationStatus}</StyledTableCell>
+								<StyledTableCell align="right"> 
 									<a
 										onClick={(event) =>
 											firebaseConfig
@@ -191,23 +228,24 @@ function ApplicationsComplete() {
 									>
 										View
 									</a>
-								</td>
-							</tr>
+								</StyledTableCell>
+
+							 </StyledTableRow>
 						) : null,
 					)
 				) : (
 					<>
 						{" "}
 						{searchResults.map((detail) =>
-							detail.applicationStatus == "Complete" ? (
-								<tr className="tableRow">
-									<td className="headingRow">{detail.studentName}</td>
-									<td className="headingRow">{detail.studentEmail}</td>
-									<td className="headingRow">{detail.studentPhone}</td>
-									<td className="headingRow"> {detail.citizenship}</td>
-									<td className="headingRow"> {detail.studentCourse}</td>
-									<td className="headingRow"> {detail.applicationStatus}</td>
-									<td>
+							detail.applicationStatus == "complete" ? (
+								<StyledTableRow >
+									 <StyledTableCell component="th" scope="row">{detail.studentName}</StyledTableCell>
+									<StyledTableCell align="right">{detail.studentEmail}</StyledTableCell>
+									<StyledTableCell align="right">{detail.studentPhone}</StyledTableCell>
+									<StyledTableCell align="right"> {detail.citizenship}</StyledTableCell>
+								{/*	<StyledTableCell align="right">{detail.studentCourse}</StyledTableCell>  */}
+									<StyledTableCell align="right"> {detail.applicationStatus}</StyledTableCell>
+									<StyledTableCell align="right">
 										<a
 											onClick={(event) =>
 												firebaseConfig
@@ -229,13 +267,16 @@ function ApplicationsComplete() {
 										>
 											View
 										</a>
-									</td>
-								</tr>
+									</StyledTableCell>
+
+								</StyledTableRow>
 							) : null,
 						)}
 					</>
 				)}
-			</table>
+			  </TableBody>
+      </Table>
+    </TableContainer>
 		</div>
 	);
 }
