@@ -27,6 +27,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+
 const StudentApplications = (props) => {
 	const history = useHistory();
 	const { currentUser } = useContext(AuthContext);
@@ -246,6 +247,7 @@ const StyledTableRow = withStyles((theme) => ({
 					<StyledTableCell>Citizenship</StyledTableCell>
 					<StyledTableCell>Course</StyledTableCell>
 					<StyledTableCell>Application Status</StyledTableCell>
+					<StyledTableCell>Edit</StyledTableCell>
 				 </TableRow>
         </TableHead>
   <TableBody>
@@ -256,6 +258,52 @@ const StyledTableRow = withStyles((theme) => ({
 							<StyledTableCell align="right">{detail.birthCountry}</StyledTableCell>
 								<StyledTableCell align="right"> {detail.programName}</StyledTableCell>
 								<StyledTableCell align="right"> {doc.applicationStatus}</StyledTableCell>
+								<StyledTableCell align="right">
+								<EditIcon
+									className="editIcon"
+									onClick={(event) =>
+									
+
+										firebaseConfig
+										.firestore()
+										.collection("counselor")
+										.doc(currentUser.uid)
+										.collection("studentDetails")
+										.doc(props.location.state.detail)
+										.collection("studentApplications")
+											.doc(detail.id)
+											.get()
+											.then(() => {
+												history.push({
+																pathname: "/editstudentapplication",
+																detail: detail.id,
+																state: { detail: detail.id,
+																student: props.location.state.detail
+																},
+															});
+											})
+
+
+										// firebaseConfig
+										// .firestore()
+										// .collection("counselor")
+										// .doc(currentUser.uid)
+										// .collection("studentDetails")
+										// .doc(props.location.state.detail)
+										// .collection("studentApplications")
+										// 	.doc(detail.id)
+										// 	.get()
+										// 	.then(() => {
+										// 		console.log(detail.id);
+										// 		history.push({
+										// 			pathname: "/demo",
+										// 			detail: detail.id,
+										// 			state: { detail: detail.id },
+										// 		});
+										// 	})
+									}
+								/>
+								</StyledTableCell>
 							</StyledTableRow>
 					  ))
 					: null}

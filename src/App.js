@@ -23,6 +23,7 @@ import PaymentHistory from "./components/PaymentHistory";
 import AddPaymentHistory from "./components/AddPaymentHistory";
 import Demo from "./components/Demo";
 import Demo2 from "./components/Demo2";
+import EditStudentApplication from './components/EditStudentApplication'
 
 const App = () => {
 	return (
@@ -79,6 +80,12 @@ const App = () => {
 					/>
 					<Route exact path="/demo" component={Demo} />
 					<Route exact path="/demo2" component={Demo2} />
+
+					<Route
+						exact
+						path="/editstudentapplication"
+						component={EditStudentApplication}
+					/>
 				</Switch>
 			</Router>
 		</AuthProvider>

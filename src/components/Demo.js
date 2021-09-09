@@ -144,8 +144,20 @@ const Demo = (props) => {
 
 	return (
 		<div>
+
+
+
+{console.log('id',props.location.state.detail)}
+
+
+
+
 			{/*{console.log("zuzi", complete, com)}
 			 
+
+			
+
+
 
 {
 console.log("returnpostdata",posts)
@@ -224,7 +236,7 @@ demo.map((key)=>{
 {inProgress}
 {completeApplication} */}
 
-			<table className="studentTable">
+			{/* <table className="studentTable">
 				<tr className="tableRow">
 					<th className="headingRow">Application Status</th>
 					<th className="headingRow">Number of Applications</th>
@@ -233,7 +245,7 @@ demo.map((key)=>{
 				<tr>
 					<td>Complete</td>
 					<td>
-						{/* {console.log("above complete", complete)} */}
+						{/* {console.log("above complete", complete)}
 						{com}
 					</td>
 					<td>
@@ -255,7 +267,7 @@ demo.map((key)=>{
 						<a href="/applicationsinprogress">View</a>
 					</td>
 				</tr>
-			</table>
+			</table> */}
 		</div>
 	);
 };

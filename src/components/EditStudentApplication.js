@@ -11,17 +11,16 @@ import Logo from "../assets/logo.png";
 // import Navbar from "react-bootstrap/Navbar";
 // import Container from "react-bootstrap/Container";
 // import Nav from "react-bootstrap/Nav";
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Link from '@material-ui/core/Link';
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Link from "@material-ui/core/Link";
 
-
-const AddStudentApplications = (props) => {
+const EditStudentApplication = (props) => {
 	const { currentUser } = useContext(AuthContext);
 	const [counselorName, setCounselorName] = useState("");
 	const [counselorEmail, setCounselorEmail] = useState("");
@@ -68,41 +67,57 @@ const AddStudentApplications = (props) => {
 
 	const location = useLocation();
 	const history = useHistory();
+
 	useEffect(() => {
+		console.log(props.location.state.detail);
+		console.log(props.location.state.student);
 		firebaseConfig
 			.firestore()
 			.collection("counselor")
 			.doc(currentUser.uid)
 			.collection("studentDetails")
+			.doc(props.location.state.student)
+			.collection("studentApplications")
 			.doc(props.location.state.detail)
-
 			.get()
 			.then((snapshot) => {
-				console.log(snapshot.data());
+				console.log("snapshotdata", snapshot.data());
 				setDetails(snapshot.data());
-				setCandidateName(snapshot.data().studentName);
-				setCandidateEmail(snapshot.data().studentEmail);
-				setCandidatePhone(snapshot.data().studentPhone);
-				setDateOfBirth(snapshot.data().dateOfBirth);
-				setCandidateCity(snapshot.data().studentCity);
-				setCitizenshipCountry(snapshot.data().country);
-				setCounselorEmail(currentUser.email);
-
-				console.log("name", candidateName);
-
-				console.log("country", details.country);
 
 				console.log("details", details);
-			});
+				setAccomodationService(snapshot.data().accomodationService);
+				// setCountry(snapshot.data().country);
+				setCandidateName(snapshot.data().candidateName);
+				setCandidateEmail(snapshot.data().candidateEmail);
+				setCounselorName(snapshot.data().counselorName);
+				setCandidatePhone(snapshot.data().candidatePhone);
+				setDateOfBirth(snapshot.data().dateOfBirth);
+				setGender(snapshot.data().gender);
+				setCandidateState(snapshot.data().candidateState);
+				setCandidateCity(snapshot.data().candidateCity);
+				setDisability(snapshot.data().disability);
+				setProgramCode(snapshot.data().programCode);
+				setProgramName(snapshot.data().programName);
+				setCitizenshipStatus(snapshot.data().citizenshipStatus);
+				setCitizenshipCountry(snapshot.data().setCitizenshipCountry);
+				setBirthCountry(snapshot.data().birthCountry);
+				setPassportStatus(snapshot.data().passportStatus);
 
-		firebaseConfig
-			.firestore()
-			.collection("counselor")
-			.doc(currentUser.uid)
-			.get()
-			.then((snapshot) => {
-				setCounselorDetails(snapshot.data());
-				setCounselorName(snapshot.data().counselor_name);
+				setAddress(snapshot.data().address);
+				setAltAddress(snapshot.data().altaddress);
+
+				setQualificationName(snapshot.data().qualificationName);
+				setQualificationProviderCountry(snapshot.data().qualificationProviderCountry);
+				setQualificationProviderName(snapshot.data().qualificationProviderName);
+				setCompletedStudy(snapshot.data().completedStudy);
+
+				setEnglishProficient(snapshot.data().englishProficient);
+
+				setWorkExperience(snapshot.data().workExperience);
+
+				setAccomodationService(snapshot.data().accomodationService);
+
+				setUnderEighteen(snapshot.data().underEighteen);
 			});
 	}, []);
 
@@ -153,9 +168,10 @@ const AddStudentApplications = (props) => {
 			db.collection("counselor")
 				.doc(currentUser.uid)
 				.collection("studentDetails")
-				.doc(props.location.state.detail)
+				.doc(props.location.state.student)
 				.collection("studentApplications")
-				.add({
+				.doc(props.location.state.detail)
+				.set({
 					applicationStatus: "ApplicationFormFilled",
 					counselorPhone: counselorPhone,
 					counselorName: counselorName,
@@ -192,23 +208,23 @@ const AddStudentApplications = (props) => {
 
 					accomodationService: accomodationService,
 
-					underEig: underEighteen,
+					// underEig: underEighteen,
 				});
 
-			db.collection("counselor")
-				.doc(currentUser.uid)
-				.collection("studentDetails")
-				.doc(props.location.state.detail)
-				
-				.update({
-					applicationStatus: "In Progress",
-				});
+			// db.collection("counselor")
+			// 	.doc(currentUser.uid)
+			// 	.collection("studentDetails")
+			// 	.doc(props.location.state.detail)
 
-			console.log("student added");
+			// 	.update({
+			// 		applicationStatus: "In Progress",
+			// 	});
+
+			console.log("Changes saved");
 			history.push({
 				pathname: "/studentapplications",
-				detail: props.location.state.detail,
-				state: { detail: props.location.state.detail },
+				detail: props.location.state.student,
+				state: { detail: props.location.state.student },
 			});
 			// console.log(currentStudent);
 			// console.log(currentUser.DisplayName);
@@ -226,70 +242,51 @@ const AddStudentApplications = (props) => {
 
 	return (
 		<div>
+			<AppBar position="fixed">
+				<Toolbar>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/dashboard">
+							{" "}
+							Dashboard
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applicants">
+							{" "}
+							Applicants
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/applications">
+							{" "}
+							Applications
+						</a>
+					</Typography>
 
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a style={{ color: "white" }} href="/references">
+							References
+						</a>
+					</Typography>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						<a
+							style={{ color: "white" }}
+							onClick={() => firebaseConfig.auth().signOut()}
+						>
+							{" "}
+							SignOut
+						</a>
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			{console.log("details", details)}
 
-
-<AppBar position="fixed">
-  <Toolbar>
-    
-    <Typography  variant="h6" style={{flexGrow: 1}}>
-    <a style={{color: 'white'}} href="/dashboard"> Dashboard</a>
-    </Typography>
- <Typography  variant="h6" style={{flexGrow: 1}}>
-    <a style={{color: 'white'}} href="/applicants"> Applicants</a>
-    </Typography>
- <Typography  variant="h6" style={{flexGrow: 1}}>
-    <a style={{color: 'white'}} href="/applications"> Applications</a>
-    </Typography>
-
-<Typography  variant="h6" style={{flexGrow: 1}}>
-    <a style={{color: 'white'}} href="/references">References</a>
-    </Typography>
-<Typography  variant="h6" style={{flexGrow: 1}}>
-    <a style={{color: 'white'}} onClick={() => firebaseConfig.auth().signOut()}> SignOut</a>
-    </Typography>
-
-  
-  </Toolbar>
-</AppBar>
-
-
-
-			{/* <Navbar bg="light" expand="lg">
-				<Container>
-					<Navbar.Collapse id="basic-navbar-nav">
-						<Nav className="me-auto">
-							<img src={Logo} alt="logo" width="100" />
-							<Nav.Link href="/references" className="signoutBtn">
-								References
-							</Nav.Link>
-							<Nav.Link
-								onClick={() => firebaseConfig.auth().signOut()}
-								className="signoutBtn"
-							>
-								SignOut
-							</Nav.Link>
-
-							<Nav.Link href="/applications" className="signoutBtn">
-								Applications
-							</Nav.Link>
-							<Nav.Link href="/applicants" className="signoutBtn">
-								Applicants
-							</Nav.Link>
-							<Nav.Link href="/dashboard" className="signoutBtn">
-								Dashboard
-							</Nav.Link>
-						</Nav>
-					</Navbar.Collapse>
-				</Container>
-			</Navbar> */}
-<br/><br/><br/><br/>
 			<div>
 				<section className="signup">
 					<div className="container mt-5">
 						<div className="signup-form">
 							<h2 className="AddStudentTitle">
-								Applying for {props.location.state.univ} :
+								{/* Applying for {props.location.state.} : */}
 							</h2>
 							<div className="AddStudentformBody">
 								<form className="addStudentFormBody" onSubmit={handleSubmit}>
@@ -420,23 +417,6 @@ const AddStudentApplications = (props) => {
 									/>
 									<br />
 									<br />
-									{
-										disability=='yes'?(
-
-											<input
-										className="AddStudentInput"
-										type="text"
-										name="disabilitytype"
-										placeholder="What disability does the candidate have?"
-										
-									/>
-
-										):(
-											null
-										)
-									}
-									<br />
-									<br />
 									<h3 className="AddStudentTitle">Program Selection</h3> <hr />
 									<input
 										className="AddStudentInput"
@@ -460,17 +440,6 @@ const AddStudentApplications = (props) => {
 									/>
 									<br />
 									<br />
-									<input
-										className="AddStudentInput"
-										type="text"
-										name="programLink"
-										placeholder="Program Link"
-										required
-										/>
-									<br />
-									<br />
-
-
 									<h3 className="AddStudentTitle">
 										Citizenship Information
 									</h3>{" "}
@@ -593,7 +562,7 @@ const AddStudentApplications = (props) => {
 									<br />
 									<br />
 									<h3 className="AddStudentTitle">Education Summary</h3> <hr />
-									{/* highest secondary qualification */}
+									
 									<input
 										className="AddStudentInput"
 										type="text"
@@ -853,41 +822,45 @@ const AddStudentApplications = (props) => {
 									/>
 									<br />
 									<br />
-									{/*
-<input
-									className="AddStudentInput"
+									<input
+										className="AddStudentInput"
 										type="text"
 										name="qualificationName"
 										placeholder="Name of the highest secondary qualification"
 										qualificationName={qualificationName}
 										value={qualificationName}
-										onChange={(e) =>setQualificationName(e.target.value)}
+										onChange={(e) => setQualificationName(e.target.value)}
 									/>
-<br/><br/>
+									<br />
+									<br />
 									<input
-									className="AddStudentInput"
+										className="AddStudentInput"
 										type="text"
 										name="qualificationProviderCountry"
 										placeholder="Country of the Qualification Provider"
 										qualificationProviderCountry={qualificationProviderCountry}
 										value={qualificationProviderCountry}
-										onChange={(e) => setQualificationProviderCountry(e.target.value)}
+										onChange={(e) =>
+											setQualificationProviderCountry(e.target.value)
+										}
 									/>
-									<br/><br/>
-
-<input
-									className="AddStudentInput"
+									<br />
+									<br />
+									<input
+										className="AddStudentInput"
 										type="text"
 										name="qualificationProviderName"
 										placeholder="Name of the Qualification Provider"
 										qualificationProviderName={qualificationProviderName}
 										value={qualificationProviderName}
-										onChange={(e) => setQualificationProviderName(e.target.value)}
+										onChange={(e) =>
+											setQualificationProviderName(e.target.value)
+										}
 									/>
-									<br/><br/>
-
-<input
-									className="AddStudentInput"
+									<br />
+									<br />
+									<input
+										className="AddStudentInput"
 										type="text"
 										name="completedStudy"
 										placeholder="Is the Above study completed ?"
@@ -895,9 +868,8 @@ const AddStudentApplications = (props) => {
 										value={completedStudy}
 										onChange={(e) => setCompletedStudy(e.target.value)}
 									/>
-<br/><br/>
-
-*/}
+									<br />
+									<br />
 									<h3 className="AddStudentTitle">English Proficiency</h3>{" "}
 									<hr />
 									<input
@@ -1439,10 +1411,9 @@ const AddStudentApplications = (props) => {
 									/>
 									<br />
 									<br />
-									
-									 <hr />
+									<hr />
 									<button className="addStudentSubmitBtn" type="submit">
-										Submit the Application
+										Save the Changes
 									</button>
 								</form>
 							</div>
@@ -1454,4 +1425,4 @@ const AddStudentApplications = (props) => {
 	);
 };
 
-export default AddStudentApplications;
+export default EditStudentApplication;
