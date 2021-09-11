@@ -43,7 +43,7 @@ const Attachments = (props) => {
 	const allInputs = { imgUrl: "" };
 	const [imageAsFile, setImageAsFile] = useState("");
 	const [imageAsUrl, setImageAsUrl] = useState(allInputs);
-
+	const [urls, setUrls]= useState("")
 	useEffect(() => {
 		const details = [];
 		firebaseConfig
@@ -62,11 +62,10 @@ const Attachments = (props) => {
 
 			//		details.push(detail.data());
 				});
+				console.log("d",details)
 				setDetails(details);
 				console.log("details", details);
-				details.map((detail) => {
-					console.log(Date(detail.lastModifiedDate.nanoseconds));
-				});
+				
 			});
 
 		//firebaseConfig
@@ -115,6 +114,13 @@ const Attachments = (props) => {
 		applicationStatusDetails.map((applicationStatusDetail) => {
 			console.log("eachstatus", applicationStatusDetail.applicationStatus);
 		});
+
+
+
+// var item = storageRef.child(`/images/${props.location.state.detail}`)
+// console.log(item)
+
+  
 	}, []);
 
 	console.log(imageAsFile);
@@ -133,7 +139,7 @@ const Attachments = (props) => {
 			console.error(`not an image, the image file is a ${typeof imageAsFile}`);
 		}
 		const uploadTask = storage
-			.ref(`/images/${imageAsFile.name}`)
+			.ref(`/images/${props.location.state.detail}/${imageAsFile.name}`)
 			.put(imageAsFile);
 
 		//initiates the firebase side uploading
@@ -151,15 +157,13 @@ const Attachments = (props) => {
 				// gets the functions from storage refences the image storage in firebase by the children
 				// gets the download url then sets the image from firebase as the value for the imgUrl key:
 				storage
-					.ref("images")
+					.ref(`images/${currentUser.uid}/${props.location.state.detail}`)
 					.child(imageAsFile.name)
 					.getDownloadURL()
 					.then((fireBaseUrl) => {
-						setImageAsUrl((prevObject) => ({
-							...prevObject,
-							imgUrl: fireBaseUrl,
-						}));
+						setUrls(fireBaseUrl)
 					});
+				console.log('urls',urls)
 			},
 		);
 
@@ -207,7 +211,7 @@ const Attachments = (props) => {
 			});
 
 			console.log("firestore uploaded");
-			alert("File uploaded");
+			alert("File uploaded", urls);
 			console.log('url', imageAsUrl)
 			console.log('url.url',imageAsUrl.imgUrl )
 			
@@ -319,11 +323,12 @@ const StyledTableRow = withStyles((theme) => ({
 <br />
 			<br /><br />
 			<br />
+{console.log('insidede', details)}
 				 <TableContainer component={Paper}>
 			 <Table style={{minWidth: 700}} aria-label="customized table">
         <TableHead>
           <TableRow>
-					<StyledTableCell>Last uploaded date</StyledTableCell>
+					{/* <StyledTableCell>Last uploaded date</StyledTableCell> */}
 					<StyledTableCell>Size</StyledTableCell>
 					<StyledTableCell>File Name</StyledTableCell>
 					<StyledTableCell>Category</StyledTableCell>
@@ -333,7 +338,7 @@ const StyledTableRow = withStyles((theme) => ({
         <TableBody>
 				{details.map((detail) => (
 					<StyledTableRow >
-						<StyledTableCell component="th" scope="row">{ new Date(detail.lastModifiedDate)}</StyledTableCell>
+						{/* <StyledTableCell component="th" scope="row">{ new Date(detail.lastModifiedDate)}</StyledTableCell> */}
 						<StyledTableCell component="th" scope="row">{detail.size}</StyledTableCell>
 						<StyledTableCell component="th" scope="row">{detail.name}</StyledTableCell>
 						<StyledTableCell component="th" scope="row">{detail.type}</StyledTableCell>

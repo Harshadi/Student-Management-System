@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { AuthContext } from "./Auth";
 import firebaseConfig from "../config.js";
+import { storage } from "../config.js";
 
 const Demo = (props) => {
 	const history = useHistory();
@@ -147,7 +148,7 @@ const Demo = (props) => {
 
 
 
-{console.log('id',props.location.state.detail)}
+
 
 
 

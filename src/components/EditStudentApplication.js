@@ -220,7 +220,7 @@ const EditStudentApplication = (props) => {
 			// 		applicationStatus: "In Progress",
 			// 	});
 
-			console.log("Changes saved");
+			alert("Changes saved");
 			history.push({
 				pathname: "/studentapplications",
 				detail: props.location.state.student,
@@ -417,6 +417,23 @@ const EditStudentApplication = (props) => {
 									/>
 									<br />
 									<br />
+{				
+										disability=='yes'?(
+
+											<input
+										className="AddStudentInput"
+										type="text"
+										name="disabilitytype"
+										placeholder="What disability does the candidate have?"
+										
+									/>
+
+										):(
+											null
+										)
+									}
+									<br />
+									<br />
 									<h3 className="AddStudentTitle">Program Selection</h3> <hr />
 									<input
 										className="AddStudentInput"
@@ -438,6 +455,15 @@ const EditStudentApplication = (props) => {
 										value={programCode}
 										onChange={(e) => setProgramCode(e.target.value)}
 									/>
+									<br />
+									<br />
+<input
+										className="AddStudentInput"
+										type="text"
+										name="programLink"
+										placeholder="Program Link"
+										required
+										/>
 									<br />
 									<br />
 									<h3 className="AddStudentTitle">
