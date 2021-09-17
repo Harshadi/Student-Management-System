@@ -4,8 +4,6 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 
-
-// import 'firebase/storageRef'
 const firebaseConfig = firebase.initializeApp({
    apiKey: "AIzaSyAfBP5HGcthJ-Y0LkBOb7GqOxT3SgOKoTo",
   authDomain: "envision-overseas-counselor.firebaseapp.com",
@@ -16,6 +14,8 @@ const firebaseConfig = firebase.initializeApp({
   appId: "1:659593652599:web:7e2853a3c5596985871972",
   measurementId: "G-LPEK41QYL2"
 });
+
+
 
 const storage = firebase.storage()
 // const storageRef = firebase.storageRef()
