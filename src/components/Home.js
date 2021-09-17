@@ -33,12 +33,13 @@ const Home = () => {
 					<Link to="/login" className="loginBtn">
 						Log In
 					</Link>
-					<p className="or">or</p>{" "}
+					{/* <p className="or">or</p>{" "}
 					<Link to="/signup" className="signupBtn">
 						Sign Up
-					</Link>
+					</Link> */}
 				</p>
-			)}
+			
+		)}
 		</>
 	);
 };
