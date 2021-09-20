@@ -98,6 +98,30 @@ const AddPaymentHistory = (props) => {
 					paymentMode: paymentMode,
 				});
 
+				applicationStatusDetails.map((applicationStatusDetail) => {
+					console.log("eachstatus", applicationStatusDetail.applicationStatus);
+					db.collection("counselor")
+					  .doc(currentUser.uid)
+					  .collection("studentDetails")
+					  .doc(props.location.state.detail)
+					  .collection("studentApplications")
+			
+					  .doc(applicationStatusDetail.id)
+					  .update({
+						applicationStatus: "PaymentFormFilled",
+					  });
+				  });
+				// db.collection("counselor")
+				// .doc(currentUser.uid)
+				// .collection("studentDetails")
+				// .doc(props.location.state.detail)
+				// .collection("studentApplications")
+				// .update({
+				// 	applicationStatus: 'PaymentFormFilled'
+				// });
+
+
+
 			db.collection("counselor")
 				.doc(currentUser.uid)
 				.collection("studentDetails")
